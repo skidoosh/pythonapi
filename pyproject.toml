@@ -56,3 +56,9 @@ select = [
 quote-style = "single"
 indent-style = "space"
 line-ending = "auto"
+
+[tool.ty.rules]
+unused-ignore-comment = "warn"
+redundant-cast = "ignore"
+possibly-missing-attribute = "error"
+possibly-missing-import = "error"

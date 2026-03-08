@@ -5,3 +5,7 @@ includes:
         taskfile: git@github.com:skidoosh/taskfiles.git//docker.yaml?ref=main
     python:
         taskfile: git@github.com:skidoosh/taskfiles.git//python.yaml?ref=main
+
+tasks:
+    run:
+        docker run --rm -it --entrypoint /bin/bash -v $(pwd):/app -w /app dev:local
