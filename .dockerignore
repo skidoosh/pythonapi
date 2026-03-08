@@ -1,0 +1,10 @@
+__pycache__
+.idea
+.coverage
+.pytest_cache
+.raff_cache
+.venv
+htmlcov
+oci
+tasks
+taskfile.yaml

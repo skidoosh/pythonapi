@@ -1,0 +1,58 @@
+[project]
+name = "pyapi"
+version = "1.0.0"
+description = "Simple fastapi api"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.135.1",
+]
+
+[dependency-groups]
+dev = [
+    "pip-audit>=2.10.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.4",
+    "ty>=0.0.19",
+]
+
+[tool.coverage.run]
+omit = [
+    ".venv"
+]
+
+[tool.pytest]
+minversion = "9.0"
+addopts = ["-x", "--cov=."]
+cache_dir = ".pytest_cache"
+testpaths = [
+    "app/*_tests.py",
+    "tests",
+]
+
+[tool.ruff]
+line-length = 120
+indent-width = 2
+include = [
+    "app/*.py"
+]
+exclude = [
+    "app/*_tests.py"
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "UP",
+    "B",
+    "SIM",
+    "I",
+    "S"
+]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "auto"
