@@ -1,11 +1,35 @@
 version: 3
 
 includes:
-    docker:
-        taskfile: git@github.com:skidoosh/taskfiles.git//docker.yaml?ref=main
-    python:
-        taskfile: git@github.com:skidoosh/taskfiles.git//python.yaml?ref=main
+  docker:
+    taskfile: git@github.com:skidoosh/taskfiles.git//docker.yaml?ref=main
+  python:
+    taskfile: git@github.com:skidoosh/taskfiles.git//python.yaml?ref=main
+
+env:
+  OUTPUT_DIR: .objs
 
 tasks:
-    run:
-        docker run --rm -it --entrypoint /bin/bash -v $(pwd):/app -w /app dev:local
+  build:*:*:
+    desc: "Build container"
+    cmds:
+      - mkdir -p {{ .OUTPUT_DIR }}
+      - docker build --target {{index .MATCH 0}} --tag {{index .MATCH 0}}:{{index .MATCH 1}} --progress plain --sbom true --provenance mode=max --output type=oci,dest={{ .OUTPUT_DIR }}/{{index .MATCH 0}}.tar  .
+      - grype --sort-by severity --fail-on critical --fail-on high {{ .OUTPUT_DIR }}/{{index .MATCH 0}}.tar
+      - docker load --input {{ .OUTPUT_DIR }}/{{index .MATCH 0}}.tar
+    sources:
+      - ./**/*.py
+      - ./*.py
+      - Dockerfile
+      - uv.lock
+
+  push:*:
+    desc: "Push container"
+    cmds:
+      - docker push {{index .MATCH 0}}:local
+
+  run:*:*:*:*:
+    deps:
+      - build:{{index .MATCH 0}}:{{index .MATCH 1}}
+    cmds:
+      - docker run -it --rm -p {{index .MATCH 2}}:{{index .MATCH 3}} {{index .MATCH 0}}:{{index .MATCH 1}}

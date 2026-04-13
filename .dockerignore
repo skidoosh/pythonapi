@@ -26,6 +26,7 @@ Dockerfile
 
 # Distribution / packaging
 .Python
+.python-version
 env/
 build/
 develop-eggs/
@@ -93,3 +94,7 @@ venv/
 
 # VS Code
 .vscode/
+
+# Misc
+.DS_Store
+README.md

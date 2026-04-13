@@ -10,12 +10,15 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pip-audit>=2.10.0",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
     "ruff>=0.15.4",
     "ty>=0.0.19",
 ]
+
+[tool.uv]
+exclude-newer = "P14D"
+no-build = true
 
 [tool.coverage.run]
 omit = [
