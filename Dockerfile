@@ -1,7 +1,7 @@
 FROM ghcr.io/astral-sh/uv:0.11.2 AS uv
 FROM ghcr.io/homebrew/core/go-task:3.49.1 AS taskfile
 
-FROM dhi.io/python:3.14-alpine3.23-dev  AS dev-base
+FROM python:3.14-alpine3.24  AS dev-base
 
 ENV PYTHONPATH="/app"
 
@@ -24,7 +24,7 @@ FROM scratch AS dev
 COPY --from=dev-base / /
 
 
-FROM dhi.io/python:3.14-alpine3.23-dev AS release-build
+FROM python:3.14-alpine3.24 AS release-build
 
 COPY --from=uv /uv /uvx /bin/
 
@@ -41,7 +41,7 @@ RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirement
     uv pip install -r requirements.txt --target .
 
 
-FROM dhi.io/python:3.14-alpine3.23 AS release-base
+FROM python:3.14-alpine3.24 AS release-base
 
 COPY --from=release-build /app /app
 
