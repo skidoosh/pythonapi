@@ -7,7 +7,7 @@ ENV PYTHONPATH="/app"
 
 WORKDIR /app
 
-COPY --from=uv/uv /uvx /bin/
+COPY --from=uv /uv /uvx /bin/
 COPY --from=taskfile /go-task/3.49.1/bin/task /bin/
 COPY pyproject.toml uv.lock ./
 
@@ -15,8 +15,17 @@ ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_INSTALLER_METADATA=1
 ENV UV_LINK_MODE=copy
 
-RUN uv export --frozen --no-emit-workspace --no-editable -o requirements.txt && \
+RUN --mount=type=secret,id=proxy_ca,required=false \
+    if [ -f /run/secrets/proxy_ca ]; then export SSL_CERT_FILE=/run/secrets/proxy_ca; fi && \
+    uv export --frozen --no-emit-workspace --no-editable -o requirements.txt && \
     uv pip install -r requirements.txt --target .
+
+
+FROM dev-base AS test
+
+COPY app/ ./app/
+
+RUN python -m pytest
 
 
 FROM scratch AS dev
@@ -37,7 +46,9 @@ ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_INSTALLER_METADATA=1
 ENV UV_LINK_MODE=copy
 
-RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
+RUN --mount=type=secret,id=proxy_ca,required=false \
+    if [ -f /run/secrets/proxy_ca ]; then export SSL_CERT_FILE=/run/secrets/proxy_ca; fi && \
+    uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
     uv pip install -r requirements.txt --target .
 
 
