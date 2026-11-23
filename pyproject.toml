@@ -17,7 +17,7 @@ dev = [
 ]
 
 [tool.uv]
-exclude-newer = "P14D"
+exclude-newer = "P3D"
 no-build = true
 
 [tool.coverage.run]
