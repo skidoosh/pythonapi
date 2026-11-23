@@ -5,7 +5,7 @@ description = "Simple fastapi api"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "fastapi[standard]>=0.135.1",
+    "fastapi[standard]>=0.165.0",
 ]
 
 [dependency-groups]
@@ -17,7 +17,7 @@ dev = [
 ]
 
 [tool.uv]
-exclude-newer = "P14D"
+exclude-newer = "P3D"
 no-build = true
 
 [tool.coverage.run]
