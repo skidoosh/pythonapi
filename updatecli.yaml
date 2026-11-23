@@ -1,0 +1,47 @@
+# NOTE: Example pipeline that updates the Updatecli Docker image referenced in a Dockerfile.
+# Adjust or replace it to match your workflow.
+# See https://www.updatecli.io/docs/prologue/quick-start/ for a quick-start guide.
+
+name: 'Update Updateuv Docker image in Dockerfile'
+
+# pipelineid is used to uniquely identify the pipeline across Updatecli runs
+pipelineid: "updateuv_dockerimage"
+
+sources:
+  uv:
+    name: 'Get the latest astral-sh/uv Docker image tag'
+    kind: dockerdigest
+    spec:
+      image: 'ghcr.io/astral-sh/uv'
+      versionfilter:
+        kind: semver
+        pattern: patch
+  go-task:
+    name: 'Get the latest go-task Docker image tag'
+    kind: dockerdigest
+    spec:
+      image: 'ghcr.io/homebrew/core/go-task'
+      versionfilter:
+        kind: semver
+        pattern: patch
+
+
+targets:
+  uv:
+    name: 'Update astral-sh/uv Docker image tag in Dockerfile'
+    kind: 'dockerfile'
+    sourceid: uv
+    spec:
+      file: 'Dockerfile'
+      instruction:
+        keyword: 'FROM'
+        matcher: 'ghcr.io/astral-sh/uv'
+  go-task:
+    name: 'Update go-task Docker image tag in Dockerfile'
+    kind: 'dockerfile'
+    sourceid: go-task
+    spec:
+      file: 'Dockerfile'
+      instruction:
+        keyword: 'FROM'
+        matcher: 'ghcr.io/homebrew/core/go-task'

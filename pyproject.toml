@@ -27,7 +27,7 @@ omit = [
 
 [tool.pytest]
 minversion = "9.0"
-addopts = ["-x", "--cov=."]
+addopts = ["-x", "--cov=app"]
 cache_dir = ".pytest_cache"
 testpaths = [
     "app/*_tests.py",
